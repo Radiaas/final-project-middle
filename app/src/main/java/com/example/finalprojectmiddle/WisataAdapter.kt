@@ -23,6 +23,7 @@ class WisataAdapter : RecyclerView.Adapter<WisataAdapter.WisataViewHolder>() {
         val imageView: ImageView = view.findViewById(R.id.imageView)
         val titleView: TextView = view.findViewById(R.id.titleView)
         val lokasiView: TextView = view.findViewById(R.id.lokasiView)
+        val likeIcon: ImageView = view.findViewById(R.id.likeIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WisataViewHolder {
@@ -34,23 +35,32 @@ class WisataAdapter : RecyclerView.Adapter<WisataAdapter.WisataViewHolder>() {
     override fun onBindViewHolder(holder: WisataViewHolder, position: Int) {
         val wisata = wisataList[position]
 
-        Log.d("WisataAdapter", "Menampilkan: ${wisata.title} - ${wisata.image_url}")
+        Log.d("WisataAdapter", "Menampilkan: ${wisata.title} - ${wisata.image_url} - Liked: ${wisata.liked}")
 
         holder.titleView.text = wisata.title
         holder.lokasiView.text = wisata.lokasi
 
-        // Konversi URL Google Drive sebelum memuat gambar
-        val imageUrl = convertGoogleDriveUrl(wisata.image_url)
-        Log.d("ConvertedURL", imageUrl)
-
+        // Load gambar dari API menggunakan Glide
         Glide.with(holder.imageView.context)
-            .load(imageUrl)
+            .load(convertGoogleDriveUrl(wisata.image_url))
             .into(holder.imageView)
+
+        // Tampilkan ikon hati sesuai status liked
+        if (wisata.liked) {
+            holder.likeIcon.setImageResource(R.drawable.ic_heart_liked_foreground)
+        } else {
+            holder.likeIcon.setImageResource(R.drawable.ic_heart_unliked_foreground)
+        }
+
+        // Tambahkan klik untuk mengubah status liked
+        holder.likeIcon.setOnClickListener {
+            wisata.liked = !wisata.liked // Toggle status
+            notifyItemChanged(position) // Update tampilan
+        }
     }
 
     override fun getItemCount(): Int = wisataList.size
 
-    // Fungsi untuk mengubah URL Google Drive menjadi direct link
     private fun convertGoogleDriveUrl(originalUrl: String): String {
         val regex = "https://drive.google.com/file/d/(.*?)/view".toRegex()
         val matchResult = regex.find(originalUrl)
@@ -58,7 +68,7 @@ class WisataAdapter : RecyclerView.Adapter<WisataAdapter.WisataViewHolder>() {
             val fileId = matchResult.groupValues[1]
             "https://drive.google.com/uc?export=view&id=$fileId"
         } else {
-            originalUrl // Jika format tidak cocok, gunakan URL asli
+            originalUrl
         }
     }
 }

@@ -20,5 +20,5 @@ data class WisataItem(
     val title: String,
     val lokasi: String, // Tambahkan lokasi
     val deskripsi: String, // Tambahkan deskripsi jika diperlukan
-    val liked: Boolean // Tambahkan liked jika ingin menampilkan status like
+    var liked: Boolean // Tambahkan liked jika ingin menampilkan status like
 )
