@@ -1,6 +1,8 @@
 package com.example.finalprojectmiddle
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class WisataActivity : AppCompatActivity() {
+
     private val wisataViewModel: WisataViewModel by viewModels()
     private lateinit var wisataAdapter: WisataAdapter
 
@@ -20,14 +23,24 @@ class WisataActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = wisataAdapter
 
-        wisataViewModel.fetchWisataData("c5d98b11-546f-4f03-b92a-aa4a1deb5c89")
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val token = sharedPreferences.getString("TOKEN", "") ?: ""
 
-        wisataViewModel.wisataList.observe(this) { wisataList ->
-            if (wisataList.isNotEmpty()) {
-                wisataAdapter.submitList(wisataList)
-            } else {
-                Toast.makeText(this, "Gagal mengambil data!", Toast.LENGTH_SHORT).show()
-            }
+        Log.d("WisataActivity", "Token yang digunakan: $token")
+
+        if (token.isNotEmpty()) {
+            wisataViewModel.fetchWisata(token)
+        } else {
+            Log.e("WisataActivity", "Token tidak ditemukan! Pastikan login berhasil.")
+        }
+
+        wisataViewModel.wisataList.observe(this) { list ->
+            Log.d("WisataActivity", "Jumlah Data Wisata: ${list.size}")
+            wisataAdapter.submitList(list)
+        }
+
+        wisataViewModel.errorMessage.observe(this) { message ->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
     }
 }

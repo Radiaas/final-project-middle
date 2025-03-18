@@ -1,5 +1,6 @@
 package com.example.finalprojectmiddle
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 class WisataAdapter : RecyclerView.Adapter<WisataAdapter.WisataViewHolder>() {
-    private val wisataList = mutableListOf<Wisata>()
 
-    fun submitList(newList: List<Wisata>) {
-        wisataList.clear()
-        wisataList.addAll(newList)
+    private var wisataList: List<WisataItem> = listOf()
+
+    fun submitList(list: List<WisataItem>) {
+        wisataList = list
         notifyDataSetChanged()
+    }
+
+    class WisataViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val imageView: ImageView = view.findViewById(R.id.imageView)
+        val titleView: TextView = view.findViewById(R.id.titleView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WisataViewHolder {
@@ -24,18 +30,10 @@ class WisataAdapter : RecyclerView.Adapter<WisataAdapter.WisataViewHolder>() {
 
     override fun onBindViewHolder(holder: WisataViewHolder, position: Int) {
         val wisata = wisataList[position]
-        holder.bind(wisata)
+            Log.d("WisataAdapter", "Menampilkan: ${wisata.title}")
+        holder.titleView.text = wisata.title
+        Glide.with(holder.imageView.context).load(wisata.image_url).into(holder.imageView)
     }
 
     override fun getItemCount(): Int = wisataList.size
-
-    class WisataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        private val titleView: TextView = itemView.findViewById(R.id.titleView)
-
-        fun bind(wisata: Wisata) {
-            titleView.text = wisata.title
-            Glide.with(itemView.context).load(wisata.image_url).into(imageView)
-        }
-    }
 }

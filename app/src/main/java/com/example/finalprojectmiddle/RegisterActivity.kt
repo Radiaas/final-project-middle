@@ -1,9 +1,8 @@
 package com.example.finalprojectmiddle
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 
@@ -20,6 +19,12 @@ class RegisterActivity : AppCompatActivity() {
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val etConfirmPassword = findViewById<EditText>(R.id.etConfirmPassword)
         val btnRegister = findViewById<Button>(R.id.btnRegister)
+        val tvGoToLogin = findViewById<TextView>(R.id.tvGoToLogin)
+
+        // Navigasi ke LoginActivity
+        tvGoToLogin.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
 
         btnRegister.setOnClickListener {
             val nama = etNama.text.toString()
@@ -43,6 +48,10 @@ class RegisterActivity : AppCompatActivity() {
             response?.let {
                 if (it.status == "success") {
                     Toast.makeText(this, "Registrasi berhasil!", Toast.LENGTH_SHORT).show()
+
+                    // Setelah sukses daftar, langsung pindah ke LoginActivity
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
                 } else {
                     Toast.makeText(this, "Registrasi gagal: ${it.message}", Toast.LENGTH_SHORT).show()
                 }

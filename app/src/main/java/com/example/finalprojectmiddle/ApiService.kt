@@ -18,8 +18,8 @@ interface ApiService {
     suspend fun loginUser(@Body request: LoginRequest): Response<LoginResponse>
 
     @GET("exec")
-    fun getWisataList(
+    suspend fun getWisata(
         @Query("endpoint") endpoint: String = "listwisata",
-        @Query("token") token: String = "c5d98b11-546f-4f03-b92a-aa4a1deb5c89"
-    ): Call<ApiResponse>
+        @Query("token") token: String
+    ): Response<WisataResponse>
 }
