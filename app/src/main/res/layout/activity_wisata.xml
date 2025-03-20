@@ -4,10 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Cari Wisata..."
+        android:iconifiedByDefault="false"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="16dp"/>
+
+    <TextView
+        android:id="@+id/textNoData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Data tidak ditemukan"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:visibility="gone"
         android:padding="16dp"/>
 
 </LinearLayout>

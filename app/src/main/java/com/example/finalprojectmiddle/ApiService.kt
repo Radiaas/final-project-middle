@@ -22,4 +22,12 @@ interface ApiService {
         @Query("endpoint") endpoint: String = "listwisata",
         @Query("token") token: String
     ): Response<WisataResponse>
+
+    @GET("exec")
+    suspend fun searchWisata(
+        @Query("endpoint") endpoint: String = "searchWisata",
+        @Query("token") token: String,
+        @Query("keyword") keyword: String
+    ): Response<WisataResponse>
+
 }
