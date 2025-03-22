@@ -12,6 +12,27 @@
         android:queryHint="Cari Wisata..."
         android:iconifiedByDefault="false"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnFilterLiked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Liked"/>
+
+        <Button
+            android:id="@+id/btnFilterBookmarked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bookmarked"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

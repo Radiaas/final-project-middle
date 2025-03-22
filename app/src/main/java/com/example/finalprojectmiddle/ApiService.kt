@@ -69,4 +69,11 @@ interface ApiService {
         @Query("token") token: String,
         @Query("id_wisata") idWisata: Int
     ): Call<Void>
+
+    @GET("exec")
+    suspend fun getBookmarkedWisata(
+        @Query("endpoint") endpoint: String = "getBookmarks",
+        @Query("token") token: String
+    ): Response<BookmarkResponse>
+
 }

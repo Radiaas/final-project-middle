@@ -13,6 +13,46 @@ class WisataViewModel : ViewModel() {
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
+    private var isShowingBookmarks = false  // Tambahkan state toggle
+
+    fun toggleBookmarkedWisata(token: String) {
+        if (isShowingBookmarks) {
+            // Jika sedang menampilkan bookmark, kembali ke daftar wisata umum
+            fetchWisata(token)
+            isShowingBookmarks = false
+        } else {
+            // Jika belum menampilkan bookmark, ambil data bookmark
+            viewModelScope.launch {
+                try {
+                    val response = RetrofitClient.instance.getBookmarkedWisata(token = token)
+                    if (response.isSuccessful && response.body() != null) {
+                        _wisataList.postValue(response.body()?.data?.bookmarks ?: emptyList())
+                        isShowingBookmarks = true
+                    } else {
+                        _errorMessage.postValue("Gagal mengambil data wisata yang di-bookmark.")
+                    }
+                } catch (e: Exception) {
+                    _errorMessage.postValue("Error: ${e.message}")
+                }
+            }
+        }
+    }
+
+//    fun fetchBookmarkedWisata(token: String) {
+//        viewModelScope.launch {
+//            try {
+//                val response = RetrofitClient.instance.getBookmarkedWisata(token = token)
+//                if (response.isSuccessful && response.body() != null) {
+//                    _wisataList.postValue(response.body()?.data?.bookmarks ?: emptyList())
+//                } else {
+//                    _errorMessage.postValue("Gagal mengambil data wisata yang di-bookmark.")
+//                }
+//            } catch (e: Exception) {
+//                _errorMessage.postValue("Error: ${e.message}")
+//            }
+//        }
+//    }
+
 
     fun fetchWisata(token: String) {
         viewModelScope.launch {

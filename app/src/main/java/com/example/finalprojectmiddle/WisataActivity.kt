@@ -24,6 +24,7 @@ class WisataActivity : AppCompatActivity() {
     private lateinit var textNoData: TextView
     private lateinit var btnLogout: Button
     private lateinit var btnProfile: Button
+    private lateinit var btnFilterBookmarked: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +35,18 @@ class WisataActivity : AppCompatActivity() {
         observeViewModel()
         handleSearch()
         handleLogout()
+
+        btnFilterBookmarked = findViewById(R.id.btnFilterBookmarked)
+
+        btnFilterBookmarked.setOnClickListener {
+            val token = getToken()
+            if (token.isNotEmpty()) {
+                wisataViewModel.toggleBookmarkedWisata(token)
+            } else {
+                showToast("Token tidak ditemukan, silakan login ulang.")
+            }
+        }
+
 
         btnProfile.setOnClickListener {
             showProfileDialog()

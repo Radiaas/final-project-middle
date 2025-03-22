@@ -22,3 +22,17 @@ data class WisataItem(
     val deskripsi: String, // Tambahkan deskripsi jika diperlukan
     var liked: Boolean // Tambahkan liked jika ingin menampilkan status like
 )
+
+data class BookmarkResponse(
+    val code: Int,
+    val status: String,
+    val message: String,
+    val data: BookmarkData?
+)
+
+data class BookmarkData(
+    val bookmarks: List<WisataItem>?,
+    val total: Int,
+    val page: Int,
+    val total_pages: Int
+)
