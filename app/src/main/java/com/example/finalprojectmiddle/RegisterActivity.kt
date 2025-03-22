@@ -30,7 +30,7 @@ class RegisterActivity : AppCompatActivity() {
             val nama = etNama.text.toString()
             val email = etEmail.text.toString()
             val nomorHp = etNomorHp.text.toString()
-            val password = etPassword.text.toString()
+            val password = etPassword.text.toString().trim() //mencegah spasi di dalam inputan user
             val confirmPassword = etConfirmPassword.text.toString()
 
             if (nama.isNotEmpty() && email.isNotEmpty() && nomorHp.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {

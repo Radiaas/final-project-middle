@@ -37,6 +37,16 @@ class WisataActivity : AppCompatActivity() {
         handleLogout()
 
         btnFilterBookmarked = findViewById(R.id.btnFilterBookmarked)
+        val btnFilterLiked = findViewById<Button>(R.id.btnFilterLiked)
+
+        btnFilterLiked.setOnClickListener {
+            val token = getToken()
+            if (token.isNotEmpty()) {
+                wisataViewModel.toggleLikedWisata(token)
+            } else {
+                showToast("Token tidak ditemukan, silakan login ulang.")
+            }
+        }
 
         btnFilterBookmarked.setOnClickListener {
             val token = getToken()

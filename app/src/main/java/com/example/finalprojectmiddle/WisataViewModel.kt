@@ -13,7 +13,32 @@ class WisataViewModel : ViewModel() {
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
+
+    private var isShowingLiked = false
     private var isShowingBookmarks = false  // Tambahkan state toggle
+
+    fun toggleLikedWisata(token: String) {
+        if (isShowingLiked) {
+            fetchWisata(token) // Kembali ke daftar wisata umum
+            isShowingLiked = false
+        } else {
+            viewModelScope.launch {
+                try {
+                    val response = RetrofitClient.instance.getWisata(token = token)
+                    if (response.isSuccessful && response.body() != null) {
+                        val allWisata = response.body()?.data?.wisataList ?: emptyList()
+                        val likedWisata = allWisata.filter { it.liked }
+                        _wisataList.postValue(likedWisata)
+                        isShowingLiked = true
+                    } else {
+                        _errorMessage.postValue("Gagal mengambil data wisata.")
+                    }
+                } catch (e: Exception) {
+                    _errorMessage.postValue("Error: ${e.message}")
+                }
+            }
+        }
+    }
 
     fun toggleBookmarkedWisata(token: String) {
         if (isShowingBookmarks) {
@@ -37,22 +62,6 @@ class WisataViewModel : ViewModel() {
             }
         }
     }
-
-//    fun fetchBookmarkedWisata(token: String) {
-//        viewModelScope.launch {
-//            try {
-//                val response = RetrofitClient.instance.getBookmarkedWisata(token = token)
-//                if (response.isSuccessful && response.body() != null) {
-//                    _wisataList.postValue(response.body()?.data?.bookmarks ?: emptyList())
-//                } else {
-//                    _errorMessage.postValue("Gagal mengambil data wisata yang di-bookmark.")
-//                }
-//            } catch (e: Exception) {
-//                _errorMessage.postValue("Error: ${e.message}")
-//            }
-//        }
-//    }
-
 
     fun fetchWisata(token: String) {
         viewModelScope.launch {

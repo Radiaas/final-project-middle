@@ -1,5 +1,6 @@
 package com.example.finalprojectmiddle
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,7 @@ class LoginViewModel : ViewModel() {
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse: LiveData<LoginResponse> get() = _loginResponse
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun login(email: String, password: String) {
         viewModelScope.launch {
             try {
