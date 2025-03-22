@@ -1,6 +1,6 @@
 package com.example.finalprojectmiddle
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,11 +31,11 @@ class WisataAdapter : RecyclerView.Adapter<WisataAdapter.WisataViewHolder>() {
         return WisataViewHolder(view)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: WisataViewHolder, position: Int) {
         val wisata = wisataList[position]
 
-        Log.d("WisataAdapter", "Menampilkan: ${wisata.title} - ${wisata.image_url} - Liked: ${wisata.liked}")
+        // Log ID wisata
+        Log.d("WisataAdapter", "ID Wisata: ${wisata.id}, Title: ${wisata.title}")
 
         holder.titleView.text = wisata.title
         holder.lokasiView.text = wisata.lokasi
@@ -45,17 +45,23 @@ class WisataAdapter : RecyclerView.Adapter<WisataAdapter.WisataViewHolder>() {
             .load(convertGoogleDriveUrl(wisata.image_url))
             .into(holder.imageView)
 
-        // Tampilkan ikon hati sesuai status liked
         if (wisata.liked) {
             holder.likeIcon.setImageResource(R.drawable.ic_heart_liked_foreground)
         } else {
             holder.likeIcon.setImageResource(R.drawable.ic_heart_unliked_foreground)
         }
 
-        // Tambahkan klik untuk mengubah status liked
-        holder.likeIcon.setOnClickListener {
-            wisata.liked = !wisata.liked // Toggle status
-            notifyItemChanged(position) // Update tampilan
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, DetailWisata::class.java).apply {
+                putExtra("ID_WISATA", wisata.id)
+                putExtra("IMAGE_URL", convertGoogleDriveUrl(wisata.image_url))
+                putExtra("TITLE", wisata.title)
+                putExtra("LOKASI", wisata.lokasi)
+                putExtra("DESKRIPSI", wisata.deskripsi)
+                putExtra("LIKED", wisata.liked)
+            }
+            context.startActivity(intent)
         }
     }
 

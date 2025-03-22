@@ -14,3 +14,23 @@ data class LoginData(
     val email: String,
     val nomor_hp: String
 )
+
+data class LogoutResponse(
+    val status: String,
+    val code: Int,
+    val message: String
+)
+
+data class ProfileResponse(
+    val code: Int,
+    val status: String,
+    val message: String,
+    val data: ProfileData
+)
+
+data class ProfileData(
+    val id: Int,
+    val nama_lengkap: String,
+    val email: String,
+    val nomor_hp: String
+)
